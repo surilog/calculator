@@ -26,11 +26,17 @@ class QuizGame:
         self.data_file = data_file
         self.quizzes = []
         self.users = []
-        #init함수, 즉 시작할 때 같이 실행해야 데이터 로드를 하고 저장까지 한다!
-        #이게 없으면 프로그램을 새로 실행하면 다시 self.quizzes = []와 self.users = []로 시작되므로 이전에 저장했던 정보가  
-        #사라집니다.
-       
- 
+        self.quizzes, self.users = self.load_data()
+        #덮어쓰기(save_data)를 해서 기존 파일을 백지로 만들기 전에, 
+        # 옛날 내용을 파이썬 머릿속으로 먼저 옮겨 담는 작업(load_data)이 반드시 필요!
+        #위치: __init__은 프로그램 시작 시 단 한 번 실행되는 초기화 장소
+        #즉, 바로 데이터를 메모리에 저장하기 위해서
+        
+        #a모드로 파일 여는 방법 안되는 이유:
+        #"a" 모드는 파일 끝에 글자를 그냥 덧붙이는 기능이다.
+        #JSON은 문법 구조([...])가 엄격해서 그냥 덧붙이면 파일이 깨진다.
+
+
 
     def load_data(self):
         default_quiz_data = [
@@ -163,8 +169,16 @@ class QuizGame:
         return True
 
         
-
+    def add_quiz(self, question: str, choices: list, answer: str):
+        new_quiz = Quiz(question=question, choices=choices, answer=answer)
+        self.quizzes.append(new_quiz)
+        self.save_data()
                 
+
+#self.가 없다: 이 함수 안에서만 잠깐 쓰고 버릴 데이터 (예: 입력받은 question, 방금 만든 new_quiz)
+
+#self.가 있다: 이 프로그램이 끝날 때까지 객체가 계속 들고 다녀야 할 내 데이터나 내 기능 
+#(예: 전체 퀴즈 목록 self.quizzes, 저장하는 기능 self.save_data())
 
 
    
@@ -172,7 +186,6 @@ class QuizGame:
     
     def show_users(self): print("\n[사용자 목록] 준비 중입니다.")
     def check_score(self): print("\n[점수 확인] 준비 중입니다.")
-    def add_quiz(self): print("\n[퀴즈 추가] 준비 중입니다.")
     def quiz_list(self): print("\n[퀴즈 목록] 준비 중입니다.")
 
     def run(self):
@@ -191,7 +204,7 @@ class QuizGame:
                 print("\n프로그램을 종료합니다.")
                 break
             elif input_menu == "6":
-                self.add_quiz()
+                self.add_quiz_flow()
             elif input_menu == "7":
                 self.quiz_list()
             else:
@@ -212,7 +225,26 @@ class QuizGame:
                print(f"\n[{new_name}]님이 새로 등록되었습니다!")
  
    
-   
+    def add_quiz_flow(self):
+        question = input("\n추가할 문제를 입력하세요 : ").strip()
+        if not question:
+            print("문제는 빈 칸일 수 없습니다")
+            return
+
+        choices = []
+        for i in range(4):
+            choice=input(f"{i+1}번 선지를 입력하세요 : ").strip()
+            choices.append(choice)
+        answer = input("\n정답을 입력하세요 : ").strip()
+
+        if answer not in choices:
+            print("\n정답은 반드시 선지 중 하나여야 합니다!")
+            print("퀴즈 추가가 중단되었습니다.")
+            return
+        
+        self.add_quiz(question, choices, answer)
+        print(f"\n퀴즈가 추가되었습니다! 문제: {question}, 정답: {answer}")
+
    
             
 if __name__ == "__main__":
