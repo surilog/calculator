@@ -186,7 +186,14 @@ class QuizGame:
     
     def show_users(self): print("\n[사용자 목록] 준비 중입니다.")
     def check_score(self): print("\n[점수 확인] 준비 중입니다.")
-    def quiz_list(self): print("\n[퀴즈 목록] 준비 중입니다.")
+    def quiz_list(self): 
+        print("\n---[ 퀴즈 목록 ]---")
+        if not self.quizzes:
+            print("등록된 퀴즈가 없습니다.\n")
+            return
+        for idx, quiz in enumerate(self.quizzes, 1):
+            print(f"{idx}. 문제 {quiz.question} \n정답 : 비밀입니다!")
+
 
     def run(self):
         while True:
