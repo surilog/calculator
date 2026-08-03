@@ -97,7 +97,6 @@ class QuizGame:
         try:
             with open(self.data_file, "r", encoding="utf-8") as file:
                 state_data = json.load(file)
-
                 quiz_data = state_data.get("quizzes",[])#딕셔너리 형태로 받아옴
                 user_data = state_data.get("users",[])
 
@@ -123,15 +122,17 @@ class QuizGame:
                             )
                          users.append(user)
                     except KeyError as e:
-                        print(f"\n 퀴즈 데이터 형식 오류: {e}. 해당 퀴즈 항목을 건너뜁니다.")
+                        print(f"\n 유저 데이터 형식 오류: {e}. 해당 유저 항목을 건너뜁니다.")
 
                 if not quizzes:
                     quizzes=[Quiz(**quiz) for quiz in default_quiz_data]
                 return quizzes, users
-        except (FileNotFoundError, json.JSONDecodeError):
+        except (FileNotFoundError, json.JSONDecodeError, AttributeError, ValueError, KeyError):
     # 파일이 없거나 훼손되었으면 기본 퀴즈 데이터와 빈 유저 리스트를 반환
-         default_quizzes = [Quiz(**quiz) for quiz in default_quiz_data]
-         return default_quizzes, []
+         quizzes = [Quiz(**quiz) for quiz in default_quiz_data]
+         users = [User(**user) for user in default_user_data]
+         print("\n 파일이 존재하지 않거나 손상되었습니다. 기본 퀴즈 데이터를 사용하겠습니다.")
+         return quizzes, users
          
                 
 
@@ -182,55 +183,104 @@ class QuizGame:
 #self.가 있다: 이 프로그램이 끝날 때까지 객체가 계속 들고 다녀야 할 내 데이터나 내 기능 
 #(예: 전체 퀴즈 목록 self.quizzes, 저장하는 기능 self.save_data())
 
+
+    def run(self):
+        print("\n" + "=" * 40)
+        print("1. 퀴즈 풀기\n"
+        "2. 사용자 등록\n"
+        "3. 사용자 목록\n"
+        "4. 점수 확인\n"
+        "5. 종료 화면\n"
+        "6. 퀴즈 추가\n"
+        "7. 퀴즈 목록\n")
+        print("=" * 40)
+        try:
+            while True:
+                input_menu = input("메뉴를 선택하세요: ").strip()
+
+                if input_menu == "1":
+                    self.start_quiz_flow()
+                elif input_menu == "2":
+                    self.register_user_flow()
+                elif input_menu == "3":
+                    self.show_users_flow()
+                elif input_menu == "4":
+                    self.check_score_flow()
+                elif input_menu == "5":
+                    print("\n프로그램을 종료합니다.")
+                    break
+                elif input_menu == "6":
+                    self.add_quiz_flow()
+                elif input_menu == "7":
+                    self.quiz_list()
+                else:
+                    print("\n잘못된 입력입니다. 1~7번 사이의 숫자를 입력해주세요.")
+        except KeyboardInterrupt:
+            print("\n사용자에 의해 프로그램이 강제 종료되었습니다.")
+        except EOFError:
+            print("\n입력 스트림이 종료되었습니다. 프로그램을 종료합니다.")
+        finally:
+            self.save_data()
+            print("\n프로그램을 안전하게 정리하고 종료하겠습니다.")
+
+
+
     def start_quiz_flow(self):
-           name = input ("\n 퀴즈를 풀 사용자 이름을 입력해주세요 : ").strip()
-           current_user = self.find_user(name)
+        name = input ("\n 퀴즈를 풀 사용자 이름을 입력해주세요 : ").strip()
+        current_user = self.find_user(name)
 
-           if not current_user:
-               print(f"[{name}] 님은 등록되지 않은 사용자 압니다. 먼저 사용자 등록을 해주세요!") 
-               return
-           print(f"\n[{name}] 님 , 퀴즈를 시작합니다!")
-           score_gain = 0
+        if not current_user:
+            print(f"[{name}] 님은 등록되지 않은 사용자 압니다. 먼저 사용자 등록을 해주세요!") 
+            return
+        print(f"\n[{name}] 님 , 퀴즈를 시작합니다!")
 
-           for idx, quiz_items in enumerate(self.quizzes, 1):
-               print(f"\n문제 {idx} 번 : {quiz_items.question}")
-               
-               for i, choice in enumerate(quiz_items.choices, 1):
-                   print(f"{i}번 선지 : {choice}")
+        try:
+            score_gain = 0
 
-               while True:
-                   user_input = input("\n 정답을 입력하세요 : ").strip()
-                   if user_input.isdigit() and 1<= int(user_input) <=4:
-                       break
-                   else:
-                       print("잘못된 입력입니다. 1~4 사이의 숫자를 입력해주세요 : ")
+            for idx, quiz_items in enumerate(self.quizzes, 1):
+                print(f"\n문제 {idx} 번 : {quiz_items.question}")
+                
+                for i, choice in enumerate(quiz_items.choices, 1):
+                    print(f"{i}번 선지 : {choice}")
 
-               user_choice = []
-               user_choice = quiz_items.choices[int(user_input) - 1]
-               if quiz_items.check_answer(user_choice):
-                   print("정답입니다! +1점")
-                   score_gain +=1
-                   current_user.point +=1
-               else:
-                   print(f"틀렸습니다. 정답은 {quiz_items.get_answer_number()}번의 {quiz_items.answer}입니다.")
+                while True:
+                    user_input = input("\n 정답을 입력하세요 : ").strip()
+                    if user_input.isdigit() and 1<= int(user_input) <=4:
+                        break
+                    else:
+                        print("잘못된 입력입니다. 1~4 사이의 숫자를 입력해주세요 : ")
 
-               if score_gain > current_user.best_score:
-                                  current_user.best_score = score_gain
-               self.save_data()
-               print("=" * 40)
-               print(f"현재 희득 중인 포인트: {score_gain} 점 , 최고 점수: {current_user.best_score} 점 ")
-               print("=" * 40)
+                user_choice = []
+                user_choice = quiz_items.choices[int(user_input) - 1]
+                if quiz_items.check_answer(user_choice):
+                    print("정답입니다! +1점")
+                    score_gain +=1
+                    current_user.point +=1
+                else:
+                    print(f"틀렸습니다. 정답은 {quiz_items.get_answer_number()}번의 {quiz_items.answer}입니다.")
+
+                if score_gain > current_user.best_score:
+                                    current_user.best_score = score_gain
+        except KeyboardInterrupt:
+            print("\n사용자에 의해 프로그램이 강제 종료되었습니다.")
+        except EOFError:
+            print("\n입력 스트림이 종료되었습니다. 프로그램을 종료합니다.")
+        finally:
+            self.save_data()
+            print("\n프로그램을 안전하게 정리하고 종료하겠습니다.")
+                
+            self.save_data()
+            print("=" * 40)
+            print(f"현재 희득 중인 포인트: {score_gain} 점 , 최고 점수: {current_user.best_score} 점 ")
+            print("=" * 40)
                 
            
-           print("=" * 40)
-           print("\n퀴즈가 종료되었습니다!")
-           print(f"이번 라운드 획득 포인트 : {score_gain}점,  최고 점수: {current_user.best_score} 점")
-           print(f"지금까지 희득한 포인트 : {current_user.point}")
-           print("=" * 40)
+        print("=" * 40)
+        print("\n퀴즈가 종료되었습니다!")
+        print(f"이번 라운드 획득 포인트 : {score_gain}점,  최고 점수: {current_user.best_score} 점")
+        print(f"지금까지 희득한 포인트 : {current_user.point}")
+        print("=" * 40)
    
-   
-    
-    def show_users(self): print("\n[사용자 목록] 준비 중입니다.")
     def check_score_flow(self): 
         name = input("\n점수를 확인할 사용자를 입력해주세요: ").strip()
         user = self.find_user(name)
@@ -247,38 +297,6 @@ class QuizGame:
             return
         for idx, quiz in enumerate(self.quizzes, 1):
             print(f"{idx}. 문제 {quiz.question} \n정답 : 비밀입니다!")
-
-
-    def run(self):
-        print("\n" + "=" * 40)
-        print("1. 퀴즈 풀기\n"
-        "2. 사용자 등록\n"
-        "3. 사용자 목록\n"
-        "4. 점수 확인\n"
-        "5. 종료 화면\n"
-        "6. 퀴즈 추가\n"
-        "7. 퀴즈 목록\n")
-        print("=" * 40)
-        while True:
-            input_menu = input("메뉴를 선택하세요: ").strip()
-
-            if input_menu == "1":
-                self.start_quiz_flow()
-            elif input_menu == "2":
-                self.register_user_flow()
-            elif input_menu == "3":
-                self.show_users_flow()
-            elif input_menu == "4":
-                self.check_score_flow()
-            elif input_menu == "5":
-                print("\n프로그램을 종료합니다.")
-                break
-            elif input_menu == "6":
-                self.add_quiz_flow()
-            elif input_menu == "7":
-                self.quiz_list()
-            else:
-                print("\n잘못된 입력입니다. 1~7번 사이의 숫자를 입력해주세요.")
 
 
     def register_user_flow(self): 
