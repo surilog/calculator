@@ -19,7 +19,9 @@ class Quiz:
 
     def check_answer(self, user_answer: str):
         return user_answer == self.answer
-        
+
+    def get_answer_number(self):
+        return self.choices.index(self.answer) + 1
 
 class QuizGame:
     def __init__(self, data_file: str ="state.json"):
@@ -40,57 +42,57 @@ class QuizGame:
 
     def load_data(self):
         default_quiz_data = [
-            {
-                "question": "다음 중 상대경로의 설명으로 적절한 것은?",
-                "choices": [
-                    "현재 디렉토리에서 파일을 찾는 경로",
-                    "루트 디렉토리에서 파일을 찾는 경로",
-                    "절대 경로",
-                    "고정된 경로"
-                ],
-                "answer": "현재 디렉토리에서 파일을 찾는 경로"
-            },
-            {
-                "question": "바인드 마운트에 대한 설명으로 적절한 것은?",
-                "choices": [
-                    "호스트의 디렉토리를 컨테이너에 연결하는 방식",
-                    "정해진 위치에서만 데이터를 읽고 쓸 수 있는 방식",
-                    "영속성이 없는 임시 저장 방식",
-                    "컨테이너 내부에서만 데이터를 저장하는 방식"
-                ],
-                "answer": "호스트의 디렉토리를 컨테이너에 연결하는 방식"
-            },
-            {
-                "question": "다음 docker-compose.yml 파일에서의 depends_on 옵션의 역할은 무엇인가?\n\nversion: '3.8'\nservices:\n  web:\n    image: nginx:latest\n    depends_on:\n      - cache-redis\n      - db-postgres\n...",
-                "choices": [
-                    "WEB 서비스가 시작되기 전에 cache-redis와 db-postgres 서비스가 먼저 시작되도록 보장한다.",
-                    "WEB 서비스가 시작되기 전에 cache-redis와 db-postgres 서비스가 먼저 종료되도록 보장한다.",
-                    "cache-redis와 db-postgres 서비스가 시작되기 전에 WEB 서비스가 먼저 시작되도록 보장한다.",
-                    "WEB 서비스가 시작되기 전에 cache-redis와 db-postgres 서비스가 먼저 삭제되도록 보장한다."
-                ],
-                "answer": "WEB 서비스가 시작되기 전에 cache-redis와 db-postgres 서비스가 먼저 시작되도록 보장한다."
-            },
-            {
-                "question": "다음 중 다운로드된 도커 이미지를 확인하는 명령어는?",
-                "choices": [
-                    "docker image",
-                    "docker ps",
-                    "docker ps -a",
-                    "docker images"
-                ],
-                "answer": "docker images"
-            },
-            {
-                "question": "다음 프로그램의 결과로 알맞은 것은? \n\nclass Animal: def __init__(self, name, age): self.name = name\n       self.age = age\n      def say(self):\n        print(f\"안녕하세요. 제 이름은 {self.name}이고, 나이는 {self.age}살 입니다.\")\n\nclass Dog(Animal):\n        def __init__(self, name, age, breed):\n          super().__init__(name, age)\n          self.breed = breed\n        def say(self):\n          print(f\"안녕. 내 이름은 {self.name}이고, 나이는 {self.age}살!. 나는 {self.breed}!.\")\nwolf = Dog(\"늑대\", 3, \"허스키\")\nwolf.say()",
-                "choices": [
-                    "안녕하세요. 제 이름은 늑대이고, 나이는 3살 입니다. 저는 허스키입니다.",
-                    "안녕. 내 이름은 늑대이고, 나이는 3살!. 나는 허스키!.",
-                    "안녕하세요. 제 이름은 늑대이고, 나이는 3살 입니다. 나는 허스키!.",
-                    "안녕. 내 이름은 늑대이고, 나이는 3살!. 저는 허스키입니다."
-                ],
-                "answer": "안녕. 내 이름은 늑대이고, 나이는 3살!. 나는 허스키!."
-            }
-        ]
+                    {
+                        "question": "다음 중 상대경로의 설명으로 적절한 것은?",
+                        "choices": [
+                            "현재 디렉토리에서 파일을 찾는 경로",
+                            "루트 디렉토리에서 파일을 찾는 경로",
+                            "절대 경로",
+                            "고정된 경로"
+                        ],
+                        "answer": "현재 디렉토리에서 파일을 찾는 경로"
+                    },
+                    {
+                        "question": "바인드 마운트에 대한 설명으로 적절한 것은?",
+                        "choices": [
+                            "호스트의 디렉토리를 컨테이너에 연결하는 방식",
+                            "정해진 위치에서만 데이터를 읽고 쓸 수 있는 방식",
+                            "영속성이 없는 임시 저장 방식",
+                            "컨테이너 내부에서만 데이터를 저장하는 방식"
+                        ],
+                        "answer": "호스트의 디렉토리를 컨테이너에 연결하는 방식"
+                    },
+                    {
+                        "question": "다음 docker-compose.yml 파일에서의 depends_on 옵션의 역할은 무엇인가?\n\nversion: '3.8'\nservices:\n  web:\n    image: nginx:latest\n    depends_on:\n      - cache-redis\n      - db-postgres\n...",
+                        "choices": [
+                            "WEB 서비스가 시작되기 전에 cache-redis와 db-postgres 서비스가 먼저 시작되도록 보장한다.",
+                            "WEB 서비스가 시작되기 전에 cache-redis와 db-postgres 서비스가 먼저 종료되도록 보장한다.",
+                            "cache-redis와 db-postgres 서비스가 시작되기 전에 WEB 서비스가 먼저 시작되도록 보장한다.",
+                            "WEB 서비스가 시작되기 전에 cache-redis와 db-postgres 서비스가 먼저 삭제되도록 보장한다."
+                        ],
+                        "answer": "WEB 서비스가 시작되기 전에 cache-redis와 db-postgres 서비스가 먼저 시작되도록 보장한다."
+                    },
+                    {
+                        "question": "다음 중 다운로드된 도커 이미지를 확인하는 명령어는?",
+                        "choices": [
+                            "docker image",
+                            "docker ps",
+                            "docker ps -a",
+                            "docker images"
+                        ],
+                        "answer": "docker images"
+                    },
+                    {
+                        "question": "다음 프로그램의 결과로 알맞은 것은? \n\nclass Animal: def __init__(self, name, age): self.name = name\n       self.age = age\n      def say(self):\n        print(f\"안녕하세요. 제 이름은 {self.name}이고, 나이는 {self.age}살 입니다.\")\n\nclass Dog(Animal):\n        def __init__(self, name, age, breed):\n          super().__init__(name, age)\n          self.breed = breed\n        def say(self):\n          print(f\"안녕. 내 이름은 {self.name}이고, 나이는 {self.age}살!. 나는 {self.breed}!.\")\nwolf = Dog(\"늑대\", 3, \"허스키\")\nwolf.say()",
+                        "choices": [
+                            "안녕하세요. 제 이름은 늑대이고, 나이는 3살 입니다. 저는 허스키입니다.",
+                            "안녕. 내 이름은 늑대이고, 나이는 3살!. 나는 허스키!.",
+                            "안녕하세요. 제 이름은 늑대이고, 나이는 3살 입니다. 나는 허스키!.",
+                            "안녕. 내 이름은 늑대이고, 나이는 3살!. 저는 허스키입니다."
+                        ],
+                        "answer": "안녕. 내 이름은 늑대이고, 나이는 3살!. 나는 허스키!."
+                    }
+                ]
         default_user_data = []
         try:
             with open(self.data_file, "r", encoding="utf-8") as file:
@@ -173,16 +175,51 @@ class QuizGame:
         new_quiz = Quiz(question=question, choices=choices, answer=answer)
         self.quizzes.append(new_quiz)
         self.save_data()
-                
+
 
 #self.가 없다: 이 함수 안에서만 잠깐 쓰고 버릴 데이터 (예: 입력받은 question, 방금 만든 new_quiz)
 
 #self.가 있다: 이 프로그램이 끝날 때까지 객체가 계속 들고 다녀야 할 내 데이터나 내 기능 
 #(예: 전체 퀴즈 목록 self.quizzes, 저장하는 기능 self.save_data())
 
+    def start_quiz_flow(self):
+           name = input ("\n 퀴즈를 풀 사용자 이름을 입력해주세요 : ").strip()
+           current_user = self.find_user(name)
 
+           if not current_user:
+               print(f"[{name}] 님은 등록되지 않은 사용자 압니다. 먼저 사용자 등록을 해주세요!") 
+               return
+           print(f"\n[{name}] 님 , 퀴즈를 시작합니다!")
+           score_gain = 0
+
+           for idx, quiz_items in enumerate(self.quizzes, 1):
+               print(f"\n문제 {idx} 번 : {quiz_items.question}")
+               
+               for i, choice in enumerate(quiz_items.choices, 1):
+                   print(f"{i}번 선지 : {choice}")
+
+               while True:
+                   user_input = input("\n 정답을 입력하세요 : ").strip()
+                   if user_input.isdigit() and 1<= int(user_input) <=4:
+                       break
+                   else:
+                       print("잘못된 입력입니다. 1~4 사이의 숫자를 입력해주세요 : ")
+
+               user_choice = []
+               user_choice = quiz_items.choices[int(user_input) - 1]
+               if quiz_items.check_answer(user_choice):
+                   print("정답입니다! +1점")
+                   score_gain +=1
+                   current_user.point +=1
+               else:
+                   print(f"틀렸습니다. 정답은 {quiz_items.get_answer_number()}번의 {quiz_items.answer}입니다.")
+
+           print("=" * 40)
+           print("\n퀴즈가 종료되었습니다.")
+           print(f"이번 라운드 획득 포인트 : {score_gain}점")
+           print("=" * 40)
    
-    def start_quiz(self): print("\n[퀴즈 풀기] 준비 중입니다.")
+   
     
     def show_users(self): print("\n[사용자 목록] 준비 중입니다.")
     def check_score(self): print("\n[점수 확인] 준비 중입니다.")
@@ -196,11 +233,20 @@ class QuizGame:
 
 
     def run(self):
+        print("\n" + "=" * 40)
+        print("1. 퀴즈 풀기\n"
+        "2. 사용자 등록\n"
+        "3. 사용자 목록\n"
+        "4. 점수 확인\n"
+        "5. 종료 화면\n"
+        "6. 퀴즈 추가\n"
+        "7. 퀴즈 목록\n")
+        print("=" * 40)
         while True:
             input_menu = input("메뉴를 선택하세요: ").strip()
 
             if input_menu == "1":
-                self.start_quiz()
+                self.start_quiz_flow()
             elif input_menu == "2":
                 self.register_user_flow()
             elif input_menu == "3":
