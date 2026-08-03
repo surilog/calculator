@@ -1,4 +1,5 @@
 import json
+import random
 
 class User:
     def __init__(self, username, point = 0, best_score=0):
@@ -136,6 +137,7 @@ class QuizGame:
          
                 
 
+                    
                     
 
     def save_data(self):
