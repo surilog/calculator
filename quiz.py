@@ -214,15 +214,32 @@ class QuizGame:
                else:
                    print(f"틀렸습니다. 정답은 {quiz_items.get_answer_number()}번의 {quiz_items.answer}입니다.")
 
+               if score_gain > current_user.best_score:
+                                  current_user.best_score = score_gain
+               self.save_data()
+               print("=" * 40)
+               print(f"현재 희득 중인 포인트: {score_gain} 점 , 최고 점수: {current_user.best_score} 점 ")
+               print("=" * 40)
+                
+           
            print("=" * 40)
-           print("\n퀴즈가 종료되었습니다.")
-           print(f"이번 라운드 획득 포인트 : {score_gain}점")
+           print("\n퀴즈가 종료되었습니다!")
+           print(f"이번 라운드 획득 포인트 : {score_gain}점,  최고 점수: {current_user.best_score} 점")
+           print(f"지금까지 희득한 포인트 : {current_user.point}")
            print("=" * 40)
    
    
     
     def show_users(self): print("\n[사용자 목록] 준비 중입니다.")
-    def check_score(self): print("\n[점수 확인] 준비 중입니다.")
+    def check_score_flow(self): 
+        name = input("\n점수를 확인할 사용자를 입력해주세요: ").strip()
+        user = self.find_user(name)
+        if user:
+            print(f"[{user.username}]님의 현재까지 쌓인 포인트 : {user.point} , 최고 점수: {user.best_score}점 입니다.")
+        else:
+            print(f"[{name}]님은 등록되지 않은 사용자입니다. 먼저 사용자 등록을 해주세요!")
+            return
+        
     def quiz_list(self): 
         print("\n---[ 퀴즈 목록 ]---")
         if not self.quizzes:
@@ -252,7 +269,7 @@ class QuizGame:
             elif input_menu == "3":
                 self.show_users()
             elif input_menu == "4":
-                self.check_score()
+                self.check_score_flow()
             elif input_menu == "5":
                 print("\n프로그램을 종료합니다.")
                 break

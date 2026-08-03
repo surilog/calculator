@@ -54,8 +54,8 @@
     "users": [
         {
             "username": "관리자",
-            "point": 0,
-            "best_score": 0
+            "point": 4,
+            "best_score": 3
         }
     ]
 }
