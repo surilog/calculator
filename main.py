@@ -184,72 +184,48 @@ class QuizGame:
 
 #self.가 있다: 이 프로그램이 끝날 때까지 객체가 계속 들고 다녀야 할 내 데이터나 내 기능 
 #(예: 전체 퀴즈 목록 self.quizzes, 저장하는 기능 self.save_data())
-    def random_quiz_flow(self):
-        name = input ("\n 퀴즈를 풀 사용자 이름을 입력해주세요 : ").strip()
-        current_user = self.find_user(name)
+    def random_quiz(self):
+        shuffled_quizzes = self.quizzes.copy()
+        random.shuffle(shuffled_quizzes)
+        self.start_quiz_flow(shuffled_quizzes)
+  
 
-        if not current_user:
-            print(f"[{name}] 님은 등록되지 않은 사용자 압니다. 먼저 사용자 등록을 해주세요!") 
-            return
-        print(f"\n[{name}] 님 , 퀴즈를 시작합니다!")
-
-        try:
-            score_gain = 0
-            shuffled_quizzes = self.quizzes.copy()
-            random.shuffle(shuffled_quizzes)
-            for idx, quiz_items in enumerate(shuffled_quizzes, 1):
-                print(f"\n문제 {idx} 번 : {quiz_items.question}")
-                
-                for i, choice in enumerate(quiz_items.choices, 1):
-                    print(f"{i}번 선지 : {choice}")
-
-                while True:
-                    user_input = input("\n 정답을 입력하세요 : ").strip()
-                    if user_input.isdigit() and 1<= int(user_input) <=4:
-                        break
-                    else:
-                        print("잘못된 입력입니다. 1~4 사이의 숫자를 입력해주세요 : ")
-
-                user_choice = []
-                user_choice = quiz_items.choices[int(user_input) - 1]
-                if quiz_items.check_answer(user_choice):
-                    print("정답입니다! +1점")
-                    score_gain +=1
-                    current_user.point +=1
-                else:
-                    print(f"틀렸습니다. 정답은 {quiz_items.get_answer_number()}번의 {quiz_items.answer}입니다.")
-
-                if score_gain > current_user.best_score:
-                                    current_user.best_score = score_gain
-        except KeyboardInterrupt:
-            print("\n사용자에 의해 프로그램이 강제 종료되었습니다.")
-        except EOFError:
-            print("\n입력 스트림이 종료되었습니다. 프로그램을 종료합니다.")
-        finally:
-            self.save_data()
-            print("\n프로그램을 안전하게 정리하고 종료하겠습니다.")
-                
-            self.save_data()
-            print("=" * 40)
-            print(f"현재 희득 중인 포인트: {score_gain} 점 , 최고 점수: {current_user.best_score} 점 ")
-            print("=" * 40)
     
+    def delete_quiz(self):
+        if not self.quizzes:
+            print("\n삭제할 퀴즈가 없습니다.")
+            return
+        print("\n---[퀴즈 삭제]--- ")
+        for i, quiz in enumerate(self.quizzes, 1):
+            print(f"{i}번. quiz문제 {quiz.question}")
 
+        user_input = input("삭제할 퀴즈 번호를 입력하세요 :  ").strip()
+        if user_input.isdigit():
+            num = int(user_input)
+            if 0 < num <= len(self.quizzes):
+                removed = self.quizzes.pop(num-1)
+                self.save_data()
+                print(f"{removed.question} 퀴즈가 삭제되었습니다. ")
+            else:
+                print("\n목록에 없는 번호입니다.")
+        else:
+            print("\n 올바른 숫자를 입력해주세요.")
 
     def run(self):
-        print("\n" + "=" * 40)
-        print("1. 퀴즈 풀기\n"
-        "2. 사용자 등록\n"
-        "3. 사용자 목록\n"
-        "4. 점수 확인\n"
-        "5. 종료 화면\n"
-        "6. 퀴즈 추가\n"
-        "7. 퀴즈 목록\n"
-        "8. 랜덤 퀴즈 풀기\n"
-        "9. 퀴즈 삭제")
-        print("=" * 40)
+        
         try:
             while True:
+                print("\n" + "=" * 40)
+                print("1. 퀴즈 풀기\n"
+                "2. 사용자 등록\n"
+                "3. 사용자 목록\n"
+                "4. 점수 확인\n"
+                "5. 종료 화면\n"
+                "6. 퀴즈 추가\n"
+                "7. 퀴즈 목록\n"
+                "8. 랜덤 퀴즈 풀기\n"
+                "9. 퀴즈 삭제")
+                print("=" * 40)
                 input_menu = input("메뉴를 선택하세요: ").strip()
 
                 if input_menu == "1":
@@ -268,7 +244,7 @@ class QuizGame:
                 elif input_menu == "7":
                     self.quiz_list()
                 elif input_menu == "8":
-                    self.random_quiz_flow()
+                    self.random_quiz()
                 elif input_menu == "9":
                     self.delete_quiz()
                 else:
