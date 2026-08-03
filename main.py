@@ -260,18 +260,33 @@ class QuizGame:
 
 
     def start_quiz_flow(self):
-        name = input ("\n 퀴즈를 풀 사용자 이름을 입력해주세요 : ").strip()
+        name = input ("\n퀴즈를 풀 사용자 이름을 입력해주세요 : ").strip()
         current_user = self.find_user(name)
 
         if not current_user:
             print(f"[{name}] 님은 등록되지 않은 사용자 압니다. 먼저 사용자 등록을 해주세요!") 
             return
-        print(f"\n[{name}] 님 , 퀴즈를 시작합니다!")
+        print(f"\n[{name}]님 , 퀴즈를 시작합니다!")
+        user_select = input(f"몇 문제 풀고 싶으신가요? (현재 문제 수 : {len(self.quizzes)}문제) ").strip()
 
+        if not user_select.isdigit():
+            print("숫자만 입력해 주세요.")
+            return
+        num = int(user_select)
+        if num <= 0:
+            print(" 1문제 이상 선택하셔야 합니다.")
+            return
+        elif num > len(self.quizzes):
+            print(f" 문제 수가 부족하여 전체 문제({len(self.quizzes)}개)로 진행합니다.")
+            num = len(self.quizzes)
+
+        selected_quizzes = self.quizzes[:num]
+
+        
         try:
             score_gain = 0
 
-            for idx, quiz_items in enumerate(self.quizzes, 1):
+            for idx, quiz_items in enumerate(selected_quizzes, 1):
                 print(f"\n문제 {idx} 번 : {quiz_items.question}")
                 
                 for i, choice in enumerate(quiz_items.choices, 1):
