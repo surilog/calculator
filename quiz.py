@@ -267,7 +267,7 @@ class QuizGame:
             elif input_menu == "2":
                 self.register_user_flow()
             elif input_menu == "3":
-                self.show_users()
+                self.show_users_flow()
             elif input_menu == "4":
                 self.check_score_flow()
             elif input_menu == "5":
@@ -294,7 +294,14 @@ class QuizGame:
            else:
                print(f"\n[{new_name}]님이 새로 등록되었습니다!")
  
-   
+    def show_users_flow(self):
+        print("\n ---[사용자 목록]---")
+        if not self.users:
+            print("\n 등록된 사용자가 없습니다.")
+            return
+        for idx, user in enumerate(self.users,1):
+            print(f"{idx}. {user.username} (최고 점수 :  {user.best_score})점")
+
     def add_quiz_flow(self):
         question = input("\n추가할 문제를 입력하세요 : ").strip()
         if not question:
