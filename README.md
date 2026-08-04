@@ -19,7 +19,7 @@
 본 프로젝트는 아래의 환경에서 개발 및 테스트되었습니다.
 
 * **IDE**: Visual Studio Code
-* **Language**: Python 3.x
+* **Language**: Python 3.12.2
 * **Version Control**: Git
 
 ![개발 환경 설정](images/play/python.png)
@@ -163,7 +163,7 @@
 * Python 3.10 이상이 설치되어 있어야 합니다.
 
 ### 2. 프로그램 실행
-별도의 외부 라이브러리 설치 없이 파이썬 표준 라이브러리만으로 실행할 수 있습니다.
+* 별도의 외부 라이브러리 설치 없이 파이썬 표준 라이브러리만으로 실행할 수 있습니다.
 
 ```bash
 python main.py
@@ -235,6 +235,7 @@ python main.py
   ```
 
 ## 데이터 파일 설명 (state.json)
+
 ### 1. 경로 및 역할
 
 **경로**: 프로젝트 QUIZ 디렉토리 내 /state.json
