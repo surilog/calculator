@@ -264,3 +264,7 @@ python main.py
 ![enumerate의 idx 움직임 확인](./images/debug/enumerate1.png)
 **enumerate 함수 디버깅 과정2**
 ![enumerate의 idx 움직임 확인2](./images/debug/enumerate2.png)
+
+
+
+**복제된 저장소에서 간단한 변경2**
