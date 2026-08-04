@@ -11,7 +11,7 @@
 - [x] 점수 확인<br>
 - [x] QuizGame 클래스<br>
 - [x] 파일 저장/불러오기 (**state.json**)<br>
-- [ ] README.md 작성<br>
+- [x] README.md 작성<br>
 - [ ] Git 저장소 복제 실습<br>
 
 ## 파이썬 CLI 퀴즈 게임 (Python Quiz Game)
@@ -156,44 +156,42 @@ python main.py
 ## 파일 구조
 
 ```Plaintext
+## 파일 구조
+
+```plaintext
 .
-├── main.py              # 퀴즈 게임 전체 메인 로직 및 CLI 실행 코드
-├── state.json           # 퀴즈, 사용자 데이터, 히스토리가 저장되는 JSON 파일 (자동 생성)
-├── README.md            # 프로젝트 설명 문서
-└── images/
-    ├── play/            # 실행 화면 및 기능 스크린샷 폴더
-    │   ├── quiz_play.png
-    │   ├── user_register.png
-    │   ├── user_list.png
-    │   ├── check_point.png
-    │   ├── exit.png
-    │   ├── add_quiz.png
-    │   ├── quiz_list.png
-    │   ├── except1.png
-    │   ├── except2.png
-    │   ├── default_data.png
-    │   ├── menu_except.png
-    │   ├── choice_except.png
-    │   ├── random.png
-    │   ├── delete_quiz1.png
-    │   ├── delete_quiz2.png
-    │   ├── choice_question.png
-    │   ├── hint.png
-    │   └── history.png
-    ├── errors/          # 예외 상황 및 오류 디버깅 이미지
-    │   ├── errorcodesuri.png
-    │   ├── mohanloop.png
-    │   ├── nouser.png
-    │   └── nouser_success.png
-    ├── debug/           # 코드 검증 및 디버깅 스크린샷
-    │   ├── enumerate1.png
-    │   ├── enumerate2.png
-    │   ├── enumerate함수 디버깅1.png
-    │   └── enumerate함수 디버깅2.png
-    └── add_user/        # 유저 등록 예외 처리 검증 스크린샷
-        ├── debug.png
-        ├── error.png
-        └── success.png
+├── main.py                # 퀴즈 게임 전체 메인 로직 및 CLI 실행 파일
+├── state.json             # 퀴즈, 사용자 데이터, 히스토리가 저장되는 JSON 데이터베이스 (자동 생성)
+├── README.md              # 프로젝트 안내 및 포트폴리오 문서
+├── .gitignore             # Git 버전 관리 제외 설정 파일
+│
+├── images/                # README용 기능 및 실행 화면 스크린샷
+│   └── play/
+│       ├── branch.png
+│       ├── check_point.png
+│       ├── choice_except.png
+│       ├── choice_question.png
+│       ├── default_data.png
+│       ├── delete_quiz1.png
+│       ├── delete_quiz2.png
+│       ├── except1.png
+│       ├── except2.png
+│       ├── exit.png
+│       ├── hint.png
+│       ├── history.png
+│       ├── menu_except.png
+│       ├── quiz_list.png
+│       ├── quiz_play.png
+│       ├── random.png
+│       ├── user_list.png
+│       └── user_register.png
+│
+└── [학습 & 개념 검증 예시 예제 코드]
+    ├── __dict이유.py       # 객체 속성 직렬화(__dict__) 및 to_dict() 학습 파일
+    ├── enumerate.py        # enumerate() 인덱스 순회 학습 파일
+    ├── finally활용 이유.py  # try-except-finally 예외 처리 및 데이터 저장 검증 파일
+    ├── json영속화.py        # json.loads() 및 dict.get() 하위 호환성 예제
+    └── mutable_object.py   # 가변 객체(Mutable) 기본 매개변수 함정 예제
           
 ```
 
