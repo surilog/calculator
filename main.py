@@ -1,22 +1,32 @@
 import json
 import random
+from datetime import datetime
 
 class User:
-    def __init__(self, username, point = 0, best_score=0):
+    def __init__(self, username, point = 0, best_score=0, history=None, created_at = None):
         self.username = username
         self.point = point
         self.best_score = best_score
+        self.history = history if history is not None else []
+        self.created_at = created_at if created_at is not None else datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        #__init__의 속성으로  [] 안 넣는 이유
+        # 기본값이 [] 되버리면 모든 유저 객체가 단 하나의 리스트를 공유하게 된다.
+        # 조건문으로 유저마다 각각 독립된 새로운 빈 리스트를 만들어 주는 것.
+
+
 
     def to_dict(self):
-        return {"username" : self.username, "point" : self.point, "best_score" : self.best_score}
+        return {"username" : self.username, "point" : self.point, "best_score" : self.best_score, "history" : self.history, "created_at": self.created_at}
     
 
 
+
 class Quiz:
-    def __init__(self, question:str, choices: list, answer:str):
+    def __init__(self, question:str, choices: list, answer:str, hint:str = "힌트가 제공되지 않는 문제입니다."):
         self.question = question
         self.choices = choices
         self.answer = answer
+        self.hint = hint
 
     def check_answer(self, user_answer: str):
         return user_answer == self.answer
@@ -51,7 +61,8 @@ class QuizGame:
                             "절대 경로",
                             "고정된 경로"
                         ],
-                        "answer": "현재 디렉토리에서 파일을 찾는 경로"
+                        "answer": "현재 디렉토리에서 파일을 찾는 경로",
+                        "hint" : "자유롭다..."
                     },
                     {
                         "question": "바인드 마운트에 대한 설명으로 적절한 것은?",
@@ -61,7 +72,8 @@ class QuizGame:
                             "영속성이 없는 임시 저장 방식",
                             "컨테이너 내부에서만 데이터를 저장하는 방식"
                         ],
-                        "answer": "호스트의 디렉토리를 컨테이너에 연결하는 방식"
+                        "answer": "호스트의 디렉토리를 컨테이너에 연결하는 방식",
+                        "hint" : "실시간 전송!"
                     },
                     {
                         "question": "다음 docker-compose.yml 파일에서의 depends_on 옵션의 역할은 무엇인가?\n\nversion: '3.8'\nservices:\n  web:\n    image: nginx:latest\n    depends_on:\n      - cache-redis\n      - db-postgres\n...",
@@ -71,7 +83,8 @@ class QuizGame:
                             "cache-redis와 db-postgres 서비스가 시작되기 전에 WEB 서비스가 먼저 시작되도록 보장한다.",
                             "WEB 서비스가 시작되기 전에 cache-redis와 db-postgres 서비스가 먼저 삭제되도록 보장한다."
                         ],
-                        "answer": "WEB 서비스가 시작되기 전에 cache-redis와 db-postgres 서비스가 먼저 시작되도록 보장한다."
+                        "answer": "WEB 서비스가 시작되기 전에 cache-redis와 db-postgres 서비스가 먼저 시작되도록 보장한다.",
+                        "hint" : "의존...은 후순위?"
                     },
                     {
                         "question": "다음 중 다운로드된 도커 이미지를 확인하는 명령어는?",
@@ -81,7 +94,8 @@ class QuizGame:
                             "docker ps -a",
                             "docker images"
                         ],
-                        "answer": "docker images"
+                        "answer": "docker images",
+                        
                     },
                     {
                         "question": "다음 프로그램의 결과로 알맞은 것은? \n\nclass Animal: def __init__(self, name, age): self.name = name\n       self.age = age\n      def say(self):\n        print(f\"안녕하세요. 제 이름은 {self.name}이고, 나이는 {self.age}살 입니다.\")\n\nclass Dog(Animal):\n        def __init__(self, name, age, breed):\n          super().__init__(name, age)\n          self.breed = breed\n        def say(self):\n          print(f\"안녕. 내 이름은 {self.name}이고, 나이는 {self.age}살!. 나는 {self.breed}!.\")\nwolf = Dog(\"늑대\", 3, \"허스키\")\nwolf.say()",
@@ -91,8 +105,29 @@ class QuizGame:
                             "안녕하세요. 제 이름은 늑대이고, 나이는 3살 입니다. 나는 허스키!.",
                             "안녕. 내 이름은 늑대이고, 나이는 3살!. 저는 허스키입니다."
                         ],
-                        "answer": "안녕. 내 이름은 늑대이고, 나이는 3살!. 나는 허스키!."
-                    }
+                        "answer": "안녕. 내 이름은 늑대이고, 나이는 3살!. 나는 허스키!.",
+                        "hint" : "상속"
+                    },
+                     {
+                        "question" : "다음 설명 중 틀린 것은?", 
+                        "choices" : ["shell은 사용자의 명령을 입력받아 커널이 이해할 수 있도록 번역해준다.",
+                                    "shell은 커널이 직접적인 위협으로부터 감싸주는 인터페이스다.",
+                                    "커널은 하드웨어(CPU,메모리)등을 직접 제어하고 관리하는 가장 핵심적인 제어 프로그램이다",
+                                    "허가받지 않은 사용자가 shell의 모든 기능을 사용 할 수 있게 하는 것은 바람직하다. "
+                                     ],
+                        "answer" : "허가받지 않은 사용자가 shell의 모든 기능을 사용 할 수 있게 하는 것은 바람직하다.",
+                        "hint" : "쉘은 복숭아 씨 입니다. 커널이 복숭아 씨 안의 말랑한 부분이면 쉘은 그 위를 감싸는 복숭아 씨와 같습니다."
+                    },
+                    {
+                        "question" : "다음 중 터미널에 대해서 알맞지 않은 것은?" ,
+                        "choices" : ["terminal이란 '끝' 이라는 의미로 사람의 명령이 입력되고 결과가 출력되는 최전선의 접점이라는 의미를 가지고 있다.",
+                                     "터미널이란 초창기에 글자만 입력하고 출력받을 수 있는 키보드와 모니터로 구성된 단말기를 의미했다",
+                                     "사용자가 입력한 명령어 문자열을 해석하여 커널이 이해할 수 있도록 해주는 역할을 한다.",
+                                     "사용자가 텍스트를 입력하고 컴퓨터의 실행결과를 돌려받는 입출력 통로 역할을 한다."],
+                        "answer" : "사용자가 입력한 명령어 문자열을 해석하여 커널이 이해할 수 있도록 해주는 역할을 한다.",
+                        "hint" : "커널의 기능과 헷갈리면 안됩니다!"
+                    },
+
                 ]
         default_user_data = []
         try:
@@ -107,7 +142,8 @@ class QuizGame:
                          quiz = Quiz(
                              question=quiz_item["question"],
                              choices=quiz_item["choices"],
-                             answer=quiz_item["answer"]
+                             answer=quiz_item["answer"],
+                             hint = quiz_item.get("hint", "힌트가 없습니다.")
                          )
                          quizzes.append(quiz)
                     except KeyError as e:
@@ -119,8 +155,11 @@ class QuizGame:
                          user= User(
                              username=user_item["username"],
                              point=user_item["point"],
-                             best_score=user_item["best_score"]
+                             best_score=user_item["best_score"],
+                             history=user_item.get("history", []),
+                             created_at = user_item.get("created_at","기록 없음")
                             )
+                         
                          users.append(user)
                     except KeyError as e:
                         print(f"\n 유저 데이터 형식 오류: {e}. 해당 유저 항목을 건너뜁니다.")
@@ -147,7 +186,8 @@ class QuizGame:
                     "quizzes" :  [
                        { "question": new_quiz.question,
                         "choices" : new_quiz.choices,
-                        "answer" : new_quiz.answer
+                        "answer" : new_quiz.answer,
+                        "hint" : new_quiz.hint
                     }
                     for new_quiz in self.quizzes
                     ],
@@ -164,18 +204,24 @@ class QuizGame:
             if user.username == username:
                 return user
         return None
-    #GUI로 변경할꺼기 때문에 백그라운드와 포그라운드 나눔
+    
     def register_user(self, username: str):
         if self.find_user(username) is not None:
             return False
-        new_user = User(username=username)
+
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        new_user = User(username=username, created_at=now)
         self.users.append(new_user)
         self.save_data()
         return True
 
         
-    def add_quiz(self, question: str, choices: list, answer: str):
-        new_quiz = Quiz(question=question, choices=choices, answer=answer)
+    def add_quiz(self, question: str, choices: list, answer: str, hint:str):
+        hint = input("힌트를 입력하세요 (없으면 엔터) : ").strip()
+        if not hint:
+            hint = "힌트가 없습니다."
+        self.add_quiz(question, choices, answer, hint)
+        new_quiz = Quiz(question=question, choices=choices, answer=answer, hint=hint)
         self.quizzes.append(new_quiz)
         self.save_data()
 
@@ -191,6 +237,7 @@ class QuizGame:
   
 
     
+
     def delete_quiz(self):
         if not self.quizzes:
             print("\n삭제할 퀴즈가 없습니다.")
@@ -259,7 +306,7 @@ class QuizGame:
 
 
 
-    def start_quiz_flow(self):
+    def start_quiz_flow(self, quiz_list=None):
         name = input ("\n퀴즈를 풀 사용자 이름을 입력해주세요 : ").strip()
         current_user = self.find_user(name)
 
@@ -285,31 +332,55 @@ class QuizGame:
         
         try:
             score_gain = 0
-
+            sub_score = 0
             for idx, quiz_items in enumerate(selected_quizzes, 1):
                 print(f"\n문제 {idx} 번 : {quiz_items.question}")
                 
                 for i, choice in enumerate(quiz_items.choices, 1):
                     print(f"{i}번 선지 : {choice}")
-
+                print(f"힌트가 필요하시면 5를 입력하세요! 소유 포인트{current_user.point}pt 차감 포인트{1}")
                 while True:
                     user_input = input("\n 정답을 입력하세요 : ").strip()
-                    if user_input.isdigit() and 1<= int(user_input) <=4:
+                    if user_input.isdigit() and 1<= int(user_input) <=5:
                         break
                     else:
-                        print("잘못된 입력입니다. 1~4 사이의 숫자를 입력해주세요 : ")
+                        print("잘못된 입력입니다. 1~5 사이의 숫자를 입력해주세요 : ")
+                        continue
 
-                user_choice = []
-                user_choice = quiz_items.choices[int(user_input) - 1]
-                if quiz_items.check_answer(user_choice):
-                    print("정답입니다! +1점")
-                    score_gain +=1
-                    current_user.point +=1
-                else:
-                    print(f"틀렸습니다. 정답은 {quiz_items.get_answer_number()}번의 {quiz_items.answer}입니다.")
+                if user_input == "5":
+                    if current_user.point < 1 :
+                        print("포인트를 1pt 이상 보유해야 힌트를 확인 할 수 있습니다.")
+                    else:
+                        current_user.point -=1  
+                        used_hint_count =+1
+                        print(f"\n힌트는 {quiz_items.hint} 입니다! ")
+                        print(f" (1 포인트가 차감되었습니다. 남은 포인트는 {current_user.point}pt 입니다!)")
+                    continue
+                break
 
-                if score_gain > current_user.best_score:
-                                    current_user.best_score = score_gain
+            user_choice = []
+            user_choice = quiz_items.choices[int(user_input) - 1]
+            if quiz_items.check_answer(user_choice):
+                print("정답입니다! +1점")
+                score_gain +=1
+                current_user.point +=1
+            else:
+                print(f"틀렸습니다. 정답은 {quiz_items.get_answer_number()}번의 {quiz_items.answer}입니다.")
+
+            if score_gain > current_user.best_score:
+                                current_user.best_score = score_gain
+
+            now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            record = {
+                "data": now,
+                "total_question" : len(selected_quizzes),
+                "score" : score_gain
+            }
+            current_user.history.append(record)
+            self.save_data()
+
+
+
         except KeyboardInterrupt:
             print("\n사용자에 의해 프로그램이 강제 종료되었습니다.")
         except EOFError:
@@ -320,7 +391,7 @@ class QuizGame:
                 
             self.save_data()
             print("=" * 40)
-            print(f"현재 희득 중인 포인트: {score_gain} 점 , 최고 점수: {current_user.best_score} 점 ")
+            print(f"현재 희득 중인 포인트: {score_gain} 점 , 깍인 포인트: {sub_score} ,최고 점수: {current_user.best_score} 점 ")
             print("=" * 40)
                 
            
@@ -335,6 +406,13 @@ class QuizGame:
         user = self.find_user(name)
         if user:
             print(f"[{user.username}]님의 현재까지 쌓인 포인트 : {user.point} , 최고 점수: {user.best_score}점 입니다.")
+            print(f"[게임 히스토리] {len(user.history)}회")
+
+            if not user.history:
+                print("아직 진행한 게임이 없습니다.")
+            else:
+                for idx, record in enumerate(user.history,1):
+                    print(f" {idx}. [{record['date']}] {record['total_questions']}문제 중 {record['score']}점 희득")
         else:
             print(f"[{name}]님은 등록되지 않은 사용자입니다. 먼저 사용자 등록을 해주세요!")
             return
@@ -367,7 +445,7 @@ class QuizGame:
             print("\n 등록된 사용자가 없습니다.")
             return
         for idx, user in enumerate(self.users,1):
-            print(f"{idx}. {user.username} (최고 점수 :  {user.best_score})점")
+            print(f"{idx}. {user.username} | 등록일: {user.created_at} | 보유 포인트 : {user.point}pt (최고 점수 :  {user.best_score})점")
 
     def add_quiz_flow(self):
         question = input("\n추가할 문제를 입력하세요 : ").strip()
