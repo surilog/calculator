@@ -106,12 +106,20 @@
 ![퀴즈 삭제 기능](./images/play/delete_quiz2.png)
 
 #### 12. 문제 수 선택 
+퀴즈 시작 후 사용자가 문제 수를 선택할 수 있게 해줍니다!
+![퀴즈 삭제 기능](./images/play/choice_question.png)
 
 
 #### 13. 힌트 기능
+퀴즈 시작 후 사용자가 문제 당 1번 1pt 차감하고 힌트를 확인 할 수 있습니다.
+![퀴즈 삭제 기능](./images/play/hint.png)
 
 
 #### 14. 점수 기록 히스토리
+사용자 목록과 사용자 점수 확인에서 각각 등록된 날짜, 점수, 최고점수, 게임 플레이 횟수를 알 수 있습니다.
+![퀴즈 삭제 기능](./images/play/history.png)
+
+
 ## 실행 방법
 
 ### 1. 사전 요구사항
@@ -150,22 +158,43 @@ python main.py
 ```Plaintext
 .
 ├── main.py              # 퀴즈 게임 전체 메인 로직 및 CLI 실행 코드
-├── state.json           # 퀴즈 및 사용자 데이터가 저장되는 JSON 파일 (자동 생성)
+├── state.json           # 퀴즈, 사용자 데이터, 히스토리가 저장되는 JSON 파일 (자동 생성)
 ├── README.md            # 프로젝트 설명 문서
 └── images/
-    └── play/            # 실행 화면 및 예외 처리 스크린샷 폴더
-        ├── quiz_play.png
-        ├── user_register.png
-        ├── user_list.png
-        ├── check_point.png.png
-        ├── exit.png
-        ├── add_quiz.png
-        ├── quiz_list.png
-        ├── except1.png
-        ├── except2.png
-        ├── default_data.png
-        ├── menu_except.png
-        └── choice_except.png
+    ├── play/            # 실행 화면 및 기능 스크린샷 폴더
+    │   ├── quiz_play.png
+    │   ├── user_register.png
+    │   ├── user_list.png
+    │   ├── check_point.png
+    │   ├── exit.png
+    │   ├── add_quiz.png
+    │   ├── quiz_list.png
+    │   ├── except1.png
+    │   ├── except2.png
+    │   ├── default_data.png
+    │   ├── menu_except.png
+    │   ├── choice_except.png
+    │   ├── random.png
+    │   ├── delete_quiz1.png
+    │   ├── delete_quiz2.png
+    │   ├── choice_question.png
+    │   ├── hint.png
+    │   └── history.png
+    ├── errors/          # 예외 상황 및 오류 디버깅 이미지
+    │   ├── errorcodesuri.png
+    │   ├── mohanloop.png
+    │   ├── nouser.png
+    │   └── nouser_success.png
+    ├── debug/           # 코드 검증 및 디버깅 스크린샷
+    │   ├── enumerate1.png
+    │   ├── enumerate2.png
+    │   ├── enumerate함수 디버깅1.png
+    │   └── enumerate함수 디버깅2.png
+    └── add_user/        # 유저 등록 예외 처리 검증 스크린샷
+        ├── debug.png
+        ├── error.png
+        └── success.png
+          
 ```
 
 ## 데이터 파일 설명 (state.json)
@@ -205,5 +234,26 @@ python main.py
 
 
 
+## 디버깅 및 트러블 슈팅
 
 
+### 1. 사용자 등록 시 이전의 state.json파일이 삭제되는 오류 발생.
+
+
+![사용자 등록 오류](./images/add_user/error.png)
+![사용자 등록 디버깅](./images/add_user/debug.png)
+![사용자 등록 해결](./images/add_user/success.png)
+
+
+### 2. 문제 시작 후 등록되지 않은 사용자 입력시의 예외 처리!
+
+![nontye username](./images/errors/nouser.png)
+![nontye username success](./images/errors/nouser_success.png)
+
+### 3. 잘못된 선지 입력 시 무한로그 발생!
+![무한루프 발생](./images/errors/mohanloop.png)
+![무한루프 해결](./images/errors/successloop.png)
+
+### 4. enumerate 함수 활용
+![enumerate의 idx 움직임 확인](./images/debug/enumerate1.png)
+![enumerate의 idx 움직임 확인2](./images/debug/enumerate2.png)

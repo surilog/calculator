@@ -141,7 +141,7 @@ class QuizGame:
         try:
             with open(self.data_file, "r", encoding="utf-8") as file:
                 state_data = json.load(file)
-                quiz_data = state_data.get("quizzes",[])#딕셔너리 형태로 받아옴
+                quiz_data = state_data.get("quizzes",[])
                 user_data = state_data.get("users",[])
 
                 quizzes = []# json파일과 같이 리스트안 딕셔너리로 만들기 위해 리스트로 설정
@@ -366,6 +366,7 @@ class QuizGame:
                             sub_score +=1
                             print(f"\n힌트는 {quiz_items.hint} 입니다! ")
                             print(f" (1 포인트가 차감되었습니다. 남은 포인트는 {current_user.point}pt 입니다!)")
+                            hint_used_this_quiz = True
                         continue
                     if user_input.isdigit() and 1<= int(user_input) <=4:
                         break
@@ -394,11 +395,6 @@ class QuizGame:
             self.save_data()
 
                  
-            print("=" * 40)
-            print("\n퀴즈가 종료되었습니다!")
-            print(f"이번 라운드 획득 포인트 : {score_gain}점,  최고 점수: {current_user.best_score} 점")
-            print(f"지금까지 희득한 포인트 : {current_user.point}")
-            print("=" * 40)
 
         except KeyboardInterrupt:
             print("\n사용자에 의해 프로그램이 강제 종료되었습니다.")
@@ -408,7 +404,7 @@ class QuizGame:
             self.save_data()
             print("\n프로그램을 안전하게 정리하고 종료하겠습니다.")
             print("=" * 40)
-            print(f"현재 희득 중인 포인트: {score_gain} 점 , 깍인 포인트: {sub_score} ,최고 점수: {current_user.best_score} 점 ")
+            print(f"현재 희득 중인 포인트: {score_gain} 점 , 깍인 포인트: {sub_score} ,최고 점수: {current_user.best_score} 점, 지금까지 희득한 포인트 : {current_user.point}pt ")
             print("=" * 40)
                 
       

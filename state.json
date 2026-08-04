@@ -81,45 +81,26 @@
     "users": [
         {
             "username": "관리자",
-            "point": 9,
-            "best_score": 4,
+            "point": 5,
+            "best_score": 3,
             "history": [
                 {
-                    "date": "2026-08-04 11:50:48",
-                    "total_questions": 7,
+                    "date": "2026-08-04 13:03:26",
+                    "total_questions": 3,
+                    "score": 2
+                },
+                {
+                    "date": "2026-08-04 13:04:47",
+                    "total_questions": 3,
                     "score": 3
                 },
                 {
-                    "date": "2026-08-04 11:56:54",
-                    "total_questions": 1,
-                    "score": 1
-                },
-                {
-                    "date": "2026-08-04 11:57:39",
-                    "total_questions": 8,
-                    "score": 4
-                },
-                {
-                    "date": "2026-08-04 11:57:55",
+                    "date": "2026-08-04 13:05:51",
                     "total_questions": 3,
-                    "score": 1
+                    "score": 3
                 }
             ],
-            "created_at": "2026-08-04 11:50:22"
-        },
-        {
-            "username": "부관리자",
-            "point": 0,
-            "best_score": 0,
-            "history": [],
-            "created_at": "2026-08-04 11:50:57"
-        },
-        {
-            "username": "부 관리자",
-            "point": 0,
-            "best_score": 0,
-            "history": [],
-            "created_at": "2026-08-04 11:56:39"
+            "created_at": "2026-08-04 13:01:32"
         }
     ]
 }
