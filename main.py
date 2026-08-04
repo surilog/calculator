@@ -314,6 +314,7 @@ class QuizGame:
 
 
     def start_quiz_flow(self, quiz_list=None):
+        
         name = input ("\n퀴즈를 풀 사용자 이름을 입력해주세요 : ").strip()
         current_user = self.find_user(name)
 
@@ -323,6 +324,7 @@ class QuizGame:
         print(f"\n[{name}]님 , 퀴즈를 시작합니다!")
         
         target_quizzes = quiz_list if quiz_list is not None else self.quizzes
+        #quiz_list(start_quiz_flow(random_quizzes)에서 전달됩니다.)가 있으면 ==> random   / 없으면 전체 문제 받아옵니다!  
         if not target_quizzes:
             print("\n풀 수 있는 퀴즈가 없습니다.")
             return
