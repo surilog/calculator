@@ -12,12 +12,12 @@
 - [x] QuizGame 클래스<br>
 - [x] 파일 저장/불러오기 (**state.json**)<br>
 - [x] README.md 작성<br>
-- [ ] Git 저장소 복제 실습<br>
+- [x] Git 저장소 복제 실습<br>
 
 ## 파이썬 CLI 퀴즈 게임 (Python Quiz Game)
 
-이 프로젝트는 파이썬(Python)으로 제작된 터미널(CLI) 기반의 객관식 퀴즈 프로그램입니다.  
-사용자 관리, 퀴즈 관리, 점수 누적 및  최고 점수 추적 기능을 제공하며, 모든 데이터는 JSON 파일로 자동 영속화됩니다.
+이 프로젝트는 파이썬(Python)으로 제작된 터미널(CLI) 기반의 객관식 퀴즈 프로그램입니다.<br>
+사용자 관리, 퀴즈 관리, 점수 누적 및  최고 점수 추적 기능을 제공하며, 모든 데이터는 JSON 파일로 자동 영속화됩니다.<br>
 ---
 
 ## 프로젝트 개요
@@ -59,7 +59,7 @@
 
 #### 4. 점수 확인
 점수를 확인하고픈 사용자의 점수를 확인하는 것 입니다.
-![점수확인](./images/play/check_point.png.png)
+![점수확인](./images/play/check_point.png)
 
 #### 5. 종료 화면
 메인 메뉴에서 '5'를 입력시 프로그램이 종료되는 화면입니다.
@@ -237,21 +237,30 @@ python main.py
 
 ### 1. 사용자 등록 시 이전의 state.json파일이 삭제되는 오류 발생.
 
-
+**사용자 등록 오류**
 ![사용자 등록 오류](./images/add_user/error.png)
+**사용자 등록 디버깅 과정**
 ![사용자 등록 디버깅](./images/add_user/debug.png)
+**해결**
 ![사용자 등록 해결](./images/add_user/success.png)
 
 
-### 2. 문제 시작 후 등록되지 않은 사용자 입력시의 예외 처리!
+### 2. 문제 시작 후 등록되지 않은 사용자 입력시 예외 처리!
 
+**등록되지 않은 사용자 입력시 예외처리 실패**
 ![nontye username](./images/errors/nouser.png)
+**등록되지 않은 사용자 입력시 예외처리 성공**
 ![nontye username success](./images/errors/nouser_success.png)
 
-### 3. 잘못된 선지 입력 시 무한로그 발생!
+### 3. 잘못된 선지 입력 시 무한루프 발생!
+
+**범위에서 벗어난 선지 입력 시 무한 루프 발생**
 ![무한루프 발생](./images/errors/mohanloop.png)
+**해결**
 ![무한루프 해결](./images/errors/successloop.png)
 
 ### 4. enumerate 함수 활용
+**enumerate 함수 디버깅 과정1**
 ![enumerate의 idx 움직임 확인](./images/debug/enumerate1.png)
+**enumerate 함수 디버깅 과정2**
 ![enumerate의 idx 움직임 확인2](./images/debug/enumerate2.png)
