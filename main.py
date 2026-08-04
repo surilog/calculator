@@ -28,6 +28,13 @@ class Quiz:
         self.answer = answer
         self.hint = hint
 
+        if self.answer not in self.choices:
+            raise ValueError(
+                f"정답 '{self.answer}'이(가) 선지 {self.choices} 에 없습니다. "
+                f"(문제: {self.question})"
+            )
+        self.hint = hint
+
     def check_answer(self, user_answer: str):
         return user_answer == self.answer
 
@@ -35,11 +42,12 @@ class Quiz:
         return self.choices.index(self.answer) + 1
 
 class QuizGame:
-    def __init__(self, data_file: str ="state.json"):
+    def __init__(self, data_file: str ="state.json", HINT_COST =1):
         self.data_file = data_file
         self.quizzes = []
         self.users = []
         self.quizzes, self.users = self.load_data()
+        self.HINT_COST = HINT_COST
         #덮어쓰기(save_data)를 해서 기존 파일을 백지로 만들기 전에, 
         # 옛날 내용을 파이썬 머릿속으로 먼저 옮겨 담는 작업(load_data)이 반드시 필요!
         #위치: __init__은 프로그램 시작 시 단 한 번 실행되는 초기화 장소
@@ -113,7 +121,7 @@ class QuizGame:
                         "choices" : ["shell은 사용자의 명령을 입력받아 커널이 이해할 수 있도록 번역해준다.",
                                     "shell은 커널이 직접적인 위협으로부터 감싸주는 인터페이스다.",
                                     "커널은 하드웨어(CPU,메모리)등을 직접 제어하고 관리하는 가장 핵심적인 제어 프로그램이다",
-                                    "허가받지 않은 사용자가 shell의 모든 기능을 사용 할 수 있게 하는 것은 바람직하다. "
+                                    "허가받지 않은 사용자가 shell의 모든 기능을 사용 할 수 있게 하는 것은 바람직하다."
                                      ],
                         "answer" : "허가받지 않은 사용자가 shell의 모든 기능을 사용 할 수 있게 하는 것은 바람직하다.",
                         "hint" : "쉘은 복숭아 씨 입니다. 커널이 복숭아 씨 안의 말랑한 부분이면 쉘은 그 위를 감싸는 복숭아 씨와 같습니다."
@@ -217,10 +225,6 @@ class QuizGame:
 
         
     def add_quiz(self, question: str, choices: list, answer: str, hint:str):
-        hint = input("힌트를 입력하세요 (없으면 엔터) : ").strip()
-        if not hint:
-            hint = "힌트가 없습니다."
-        self.add_quiz(question, choices, answer, hint)
         new_quiz = Quiz(question=question, choices=choices, answer=answer, hint=hint)
         self.quizzes.append(new_quiz)
         self.save_data()
@@ -231,6 +235,9 @@ class QuizGame:
 #self.가 있다: 이 프로그램이 끝날 때까지 객체가 계속 들고 다녀야 할 내 데이터나 내 기능 
 #(예: 전체 퀴즈 목록 self.quizzes, 저장하는 기능 self.save_data())
     def random_quiz(self):
+        if not self.quizzes:
+            print("\n등록된 퀴즈가 없습니다.")
+            return
         shuffled_quizzes = self.quizzes.copy()
         random.shuffle(shuffled_quizzes)
         self.start_quiz_flow(shuffled_quizzes)
@@ -311,23 +318,29 @@ class QuizGame:
         current_user = self.find_user(name)
 
         if not current_user:
-            print(f"[{name}] 님은 등록되지 않은 사용자 압니다. 먼저 사용자 등록을 해주세요!") 
+            print(f"[{name}] 님은 등록되지 않은 사용자 입니다. 먼저 사용자 등록을 해주세요!") 
             return
         print(f"\n[{name}]님 , 퀴즈를 시작합니다!")
-        user_select = input(f"몇 문제 풀고 싶으신가요? (현재 문제 수 : {len(self.quizzes)}문제) ").strip()
-
+        
+        target_quizzes = quiz_list if quiz_list is not None else self.quizzes
+        if not target_quizzes:
+            print("\n풀 수 있는 퀴즈가 없습니다.")
+            return
+        
+        user_select = input(f"몇 문제 풀고 싶으신가요? (현재 문제 수 : {len(target_quizzes)}문제) ").strip()
         if not user_select.isdigit():
             print("숫자만 입력해 주세요.")
             return
+        
         num = int(user_select)
         if num <= 0:
             print(" 1문제 이상 선택하셔야 합니다.")
             return
-        elif num > len(self.quizzes):
-            print(f" 문제 수가 부족하여 전체 문제({len(self.quizzes)}개)로 진행합니다.")
+        elif num > len(target_quizzes):
+            print(f" 문제 수가 부족하여 전체 문제({len(target_quizzes)}개)로 진행합니다.")
             num = len(self.quizzes)
 
-        selected_quizzes = self.quizzes[:num]
+        selected_quizzes = target_quizzes[:num]
 
         
         try:
@@ -338,48 +351,54 @@ class QuizGame:
                 
                 for i, choice in enumerate(quiz_items.choices, 1):
                     print(f"{i}번 선지 : {choice}")
-                print(f"힌트가 필요하시면 5를 입력하세요! 소유 포인트{current_user.point}pt 차감 포인트{1}")
+                print(f"\n힌트가 필요하시면 5를 입력하세요! 소유 포인트{current_user.point}pt 차감 포인트{self.HINT_COST}")
+                hint_used_this_quiz = False
                 while True:
                     user_input = input("\n 정답을 입력하세요 : ").strip()
-                    if user_input.isdigit() and 1<= int(user_input) <=5:
+
+                    if user_input == "5":
+                        if hint_used_this_quiz:
+                            print("이미 이 문제의 힌트를 확인했습니다.")
+                        elif current_user.point < 1 :
+                            print("포인트를 1pt 이상 보유해야 힌트를 확인 할 수 있습니다.")
+                        else:
+                            current_user.point -=1  
+                            sub_score +=1
+                            print(f"\n힌트는 {quiz_items.hint} 입니다! ")
+                            print(f" (1 포인트가 차감되었습니다. 남은 포인트는 {current_user.point}pt 입니다!)")
+                        continue
+                    if user_input.isdigit() and 1<= int(user_input) <=4:
                         break
                     else:
-                        print("잘못된 입력입니다. 1~5 사이의 숫자를 입력해주세요 : ")
-                        continue
+                        print("잘못된 입력입니다. 1~4 사이의 번호나 힌트 (5)를 입력해주세요. ")
 
-                if user_input == "5":
-                    if current_user.point < 1 :
-                        print("포인트를 1pt 이상 보유해야 힌트를 확인 할 수 있습니다.")
-                    else:
-                        current_user.point -=1  
-                        used_hint_count =+1
-                        print(f"\n힌트는 {quiz_items.hint} 입니다! ")
-                        print(f" (1 포인트가 차감되었습니다. 남은 포인트는 {current_user.point}pt 입니다!)")
-                    continue
-                break
 
-            user_choice = []
-            user_choice = quiz_items.choices[int(user_input) - 1]
-            if quiz_items.check_answer(user_choice):
-                print("정답입니다! +1점")
-                score_gain +=1
-                current_user.point +=1
-            else:
-                print(f"틀렸습니다. 정답은 {quiz_items.get_answer_number()}번의 {quiz_items.answer}입니다.")
+                user_choice = quiz_items.choices[int(user_input) - 1]
+                if quiz_items.check_answer(user_choice):
+                    print("정답입니다! +1점")
+                    score_gain +=1
+                    current_user.point +=1
+                else:
+                    print(f"틀렸습니다. 정답은 {quiz_items.get_answer_number()}번의 {quiz_items.answer}입니다.")
 
             if score_gain > current_user.best_score:
-                                current_user.best_score = score_gain
+                current_user.best_score = score_gain
 
             now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             record = {
-                "data": now,
-                "total_question" : len(selected_quizzes),
+                "date": now,
+                "total_questions" : len(selected_quizzes),
                 "score" : score_gain
             }
             current_user.history.append(record)
             self.save_data()
 
-
+                 
+            print("=" * 40)
+            print("\n퀴즈가 종료되었습니다!")
+            print(f"이번 라운드 획득 포인트 : {score_gain}점,  최고 점수: {current_user.best_score} 점")
+            print(f"지금까지 희득한 포인트 : {current_user.point}")
+            print("=" * 40)
 
         except KeyboardInterrupt:
             print("\n사용자에 의해 프로그램이 강제 종료되었습니다.")
@@ -388,18 +407,11 @@ class QuizGame:
         finally:
             self.save_data()
             print("\n프로그램을 안전하게 정리하고 종료하겠습니다.")
-                
-            self.save_data()
             print("=" * 40)
             print(f"현재 희득 중인 포인트: {score_gain} 점 , 깍인 포인트: {sub_score} ,최고 점수: {current_user.best_score} 점 ")
             print("=" * 40)
                 
-           
-        print("=" * 40)
-        print("\n퀴즈가 종료되었습니다!")
-        print(f"이번 라운드 획득 포인트 : {score_gain}점,  최고 점수: {current_user.best_score} 점")
-        print(f"지금까지 희득한 포인트 : {current_user.point}")
-        print("=" * 40)
+      
    
     def check_score_flow(self): 
         name = input("\n점수를 확인할 사용자를 입력해주세요: ").strip()
@@ -458,13 +470,16 @@ class QuizGame:
             choice=input(f"{i+1}번 선지를 입력하세요 : ").strip()
             choices.append(choice)
         answer = input("\n정답을 입력하세요 : ").strip()
-
+        hint = input("힌트를 입력하세요 (없으면 엔터) : ").strip()
+        if not hint:
+                hint = "힌트가 없습니다."
         if answer not in choices:
             print("\n정답은 반드시 선지 중 하나여야 합니다!")
             print("퀴즈 추가가 중단되었습니다.")
             return
         
-        self.add_quiz(question, choices, answer)
+        
+        self.add_quiz(question, choices, answer, hint)
         print(f"\n퀴즈가 추가되었습니다! 문제: {question}, 정답: {answer}")
 
    
