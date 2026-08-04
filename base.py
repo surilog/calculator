@@ -12,7 +12,7 @@
 
 #속성 추가하기
 class animal:
-    # __intit__() : 생성자, 객체를 만들 때 실행되는 함수
+    # __init__() : 생성자, 객체를 만들 때 실행되는 함수
     def __init__(self, name, age): #self(자기자신)이 항상 첫 번째 매개변수 / 클래스를 저장할 변수
         self.name = name # self: 객체 자기자신 . :의 name : name이라는 속성  / 즉, "객체 자기자신의 name이라는 속성은 init()로 할당받겠다" 라는 뜻
         self.age = age# 객체 자기자신의 age라는 속성은 init()로 할당받겠다" 라는 뜻
