@@ -1,3 +1,29 @@
+##  GitHub 저장소 URL
+* **Repository**: [https://github.com/surilog/Quiz.git](https://github.com/surilog/Quiz.git)
+
+---
+
+##  개발 환경 설정
+
+본 프로젝트는 아래의 환경에서 개발 및 테스트되었습니다.
+
+* **IDE**: Visual Studio Code
+* **Language**: Python 3.x
+* **Version Control**: Git
+
+![개발 환경 설정](images/play/python.png)
+![Git 설정](images/play/git1.png)
+> *VSCode 터미널 내 Python 버전(`python --version`) 및 Git 사용자 설정(`git config --list`) 확인 화면*
+
+---
+
+##  Git 커밋 및 브랜치 이력 (`git log`)
+
+의미 있는 커밋 단위 분리와 브랜치 생성/병합(Merge) 과정을 관리했습니다.
+
+![Git Log Graph](images/play/gitlog.png)
+
+
 ## 기능 요구 사항
 
 - [x] Git 저장소 설정<br>
@@ -155,9 +181,6 @@ python main.py
 
 ## 파일 구조
 
-```Plaintext
-## 파일 구조
-
 ```plaintext
 .
 ├── main.py                # 퀴즈 게임 전체 메인 로직 및 CLI 실행 파일
@@ -177,9 +200,15 @@ python main.py
 │       ├── except1.png
 │       ├── except2.png
 │       ├── exit.png
+│       ├── git1.png
+│       ├── gitclone.png
+│       ├── gitclone0.png
+│       ├── gitlog.png
+│       ├── gitpull.png
 │       ├── hint.png
 │       ├── history.png
 │       ├── menu_except.png
+│       ├── python.png
 │       ├── quiz_list.png
 │       ├── quiz_play.png
 │       ├── random.png
@@ -192,8 +221,7 @@ python main.py
     ├── finally활용 이유.py  # try-except-finally 예외 처리 및 데이터 저장 검증 파일
     ├── json영속화.py        # json.loads() 및 dict.get() 하위 호환성 예제
     └── mutable_object.py   # 가변 객체(Mutable) 기본 매개변수 함정 예제
-          
-```
+  ```
 
 ## 데이터 파일 설명 (state.json)
 ### 1. 경로 및 역할
@@ -264,7 +292,3 @@ python main.py
 ![enumerate의 idx 움직임 확인](./images/debug/enumerate1.png)
 **enumerate 함수 디버깅 과정2**
 ![enumerate의 idx 움직임 확인2](./images/debug/enumerate2.png)
-
-
-
-**복제된 저장소에서 간단한 변경2**
