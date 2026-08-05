@@ -23,7 +23,7 @@
 * **Version Control**: Git
 
 ![개발 환경 설정](images/play/python.png)
-![Git 설정](images/play/git1.png)
+![Git 설정](images/git/git1.png)
 > *VSCode 터미널 내 Python 버전(`python --version`) 및 Git 사용자 설정(`git config --list`) 확인 화면*
 
 ---
@@ -32,7 +32,7 @@
 
 의미 있는 커밋 단위 분리와 브랜치 생성/병합(Merge) 과정을 관리했습니다.
 
-![Git Log Graph](images/play/gitlog.png)
+![Git Log Graph](images/git/gitlog.png)
 
 
 ## 기능 요구 사항
